@@ -3,4 +3,54 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd"
          version="4.0">
+    <!--    项目部署符-->
+
+    <!--    上下文参数设置-->
+    <!--    用于web 容器启动时根据contextLoader 配置的路径读取spring 的配置文件-->
+    <context-param>
+        <param-name>contextConfigLocation</param-name>
+        <param-value>classpath:applicationContext.xml</param-value>
+    </context-param>
+
+    <!--    配置spring监听器，监听上下文加载器-->
+    <listener>
+        <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+    </listener>
+
+    <!--    配置servlet -->
+    <servlet>
+        <!--        配置dispatch servlet *（spring 实现）-->
+        <servlet-name>mybatis-servlet</servlet-name>
+        <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+        <!--        设置mvc 加载配置文件，加载初始化的文件-->
+        <init-param>
+            <param-name>contextConfigLocation</param-name>
+            <param-value>classpath:spring-mvc.xml</param-value>
+        </init-param>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    <!--  映射地址  -->
+    <servlet-mapping>
+        <servlet-name>mybatis-servlet</servlet-name>
+        <url-pattern>/</url-pattern>
+    </servlet-mapping>
+    <!--    配置过滤器-->
+    <filter>
+        <filter-name>SpringEncodingFilter</filter-name>
+        <!--        过滤的类-->
+        <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+        <init-param>
+            <param-name>encoding</param-name>
+            <param-value>UTF-8</param-value>
+        </init-param>
+        <init-param>
+            <param-name>forceEncoding</param-name>
+            <param-value>true</param-value>
+        </init-param>
+    </filter>
+    <filter-mapping>
+        <filter-name>SpringEncodingFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
 </web-app>
+
